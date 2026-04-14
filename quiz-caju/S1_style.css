@@ -1,34 +1,38 @@
 /* =============================================
    QuizCaju — style.css
-   Base de layout. Visual intencional cru.
-   Sua missão: dar identidade a este app.
+   Identidade: cores do caju (laranja/amarelo)
+   em um fundo creme, com sombras suaves.
    ============================================= */
 
 /* ── FONTES ──────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
 
 /* ── VARIÁVEIS ───────────────────────────────── */
-/* Personalize estas variáveis para criar a identidade visual do seu quiz */
+/* Paleta inspirada no caju: creme de fundo, laranja
+   como cor principal, amarelo como destaque secundário */
 :root {
-  --cor-fundo:      #f5f5f5;
+  --cor-fundo:      #fff8ec;   /* creme bem claro, remete à polpa */
   --cor-superficie: #ffffff;
-  --cor-borda:      #dddddd;
-  --cor-primaria:   #333333;
-  --cor-destaque:   #555555;
-  --cor-texto:      #222222;
-  --cor-texto-2:    #777777;
+  --cor-borda:      #f1d9a8;   /* bege quente no lugar de cinza */
+  --cor-primaria:   #ec8106;   /* laranja caju */
+  --cor-destaque:   #c96505;   /* laranja mais escuro p/ hover */
+  --cor-texto:      #2b1d0e;   /* marrom bem escuro ao invés de preto */
+  --cor-texto-2:    #8a6a3f;   /* marrom médio p/ textos secundários */
   --cor-acerto:     #2e7d32;
   --cor-erro:       #c62828;
-  --laranja:        #ec8106; 
-  --amarelo:        #F5E027;
-  --vermelho:       #F70000;
-
+  --laranja:        #ec8106;
+  --amarelo:        #f5e027;
+  --vermelho:       #f70000;
 
   --fonte-corpo: 'Nunito', sans-serif;
   --fonte-mono:  'JetBrains Mono', monospace;
 
-  --raio:    12px;
+  --raio:    14px;
   --raio-sm:  8px;
+
+  /* sombra suave reutilizada em vários cards */
+  --sombra-card: 0 2px 0 rgba(236, 129, 6, 0.08),
+                 0 6px 20px -8px rgba(77, 40, 0, 0.15);
 }
 
 /* ── RESET ───────────────────────────────────── */
@@ -41,9 +45,14 @@
 html { height: 100%; }
 
 /* ── BODY ────────────────────────────────────── */
+/* Fundo com um leve gradiente radial — dá profundidade
+   sem deixar a página com cara de "template" */
 body {
   font-family: var(--fonte-corpo);
   background-color: var(--cor-fundo);
+  background-image:
+    radial-gradient(circle at 15% 0%, #ffe8bd 0%, transparent 55%),
+    radial-gradient(circle at 85% 100%, #ffd98a 0%, transparent 50%);
   color: var(--cor-texto);
   min-height: 100vh;
   display: flex;
@@ -63,31 +72,43 @@ body {
   max-width: 460px;
 }
 
+/* animação de entrada discreta quando a tela é trocada */
 .tela.ativa {
   display: flex;
+  animation: entrar 0.35s ease-out;
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── BOTÃO ───────────────────────────────────── */
 .btn {
   width: 100%;
-  padding: 0.9rem 1.5rem;
-  border: 2px solid var(--cor-primaria);
+  padding: 0.95rem 1.5rem;
+  border: none;
   border-radius: var(--raio);
   background-color: var(--cor-primaria);
   color: #fff;
   font-family: var(--fonte-corpo);
   font-size: 1rem;
   font-weight: 800;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: opacity 0.15s;
+  /* "borda inferior" falsa dando volume, estilo botão físico */
+  box-shadow: 0 4px 0 var(--cor-destaque);
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
 }
 
 .btn:hover {
-  opacity: 0.85;
+  background-color: var(--cor-destaque);
 }
 
+/* quando clicado o botão "afunda" */
 .btn:active {
-  transform: scale(0.97);
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--cor-destaque);
 }
 
 /* ══ TELA HOME ══════════════════════════════════ */
@@ -97,16 +118,25 @@ body {
 }
 
 .logo-icone {
-  font-size: 3.5rem;
+  font-size: 3.8rem;
   display: block;
   margin-bottom: 0.4rem;
+  /* balanço leve no ícone da home */
+  animation: balanco 3s ease-in-out infinite;
+}
+
+@keyframes balanco {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
 }
 
 .logo-texto {
   font-size: 2.8rem;
   font-weight: 800;
   color: var(--cor-primaria);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+  /* sombra curta pra dar leve destaque ao título */
+  text-shadow: 0 2px 0 rgba(236, 129, 6, 0.15);
 }
 
 .logo-sub {
@@ -131,6 +161,7 @@ body {
   background: var(--cor-superficie);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio);
+  box-shadow: var(--sombra-card);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,7 +170,7 @@ body {
 
 .info-num {
   font-family: var(--fonte-mono);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--cor-primaria);
 }
@@ -170,29 +201,38 @@ body {
 
 .campo-nickname input {
   width: 100%;
-  padding: 0.85rem 1rem;
+  padding: 0.9rem 1rem;
   background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
+  border: 2px solid var(--cor-borda);
   border-radius: var(--raio);
   color: var(--cor-texto);
   font-family: var(--fonte-mono);
   font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* anel de foco laranja suave — ajuda acessibilidade */
 .campo-nickname input:focus {
   border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 3px rgba(236, 129, 6, 0.18);
 }
 
 .campo-nickname input::placeholder {
-  color: var(--cor-borda);
+  color: #c9a96a;
 }
 
 .campo-erro {
   font-size: 0.78rem;
   color: var(--cor-erro);
   min-height: 1rem;
+  padding-left: 0.2rem;
+}
+
+.loading-msg {
+  font-family: var(--fonte-mono);
+  font-size: 0.72rem;
+  color: var(--cor-texto-2);
   padding-left: 0.2rem;
 }
 
@@ -207,19 +247,21 @@ body {
 
 .progresso-info {
   font-family: var(--fonte-mono);
-  font-size: 0.75rem;
-  color: var(--cor-texto-2);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--cor-texto);
   white-space: nowrap;
 }
 
 .progresso-sep {
-  margin: 0 1px;
+  margin: 0 2px;
+  color: var(--cor-texto-2);
 }
 
-/* barra de progresso */
+/* barra de progresso com degradê laranja→amarelo */
 .barra-progresso {
   flex: 1;
-  height: 6px;
+  height: 8px;
   background: var(--cor-borda);
   border-radius: 999px;
   overflow: hidden;
@@ -228,7 +270,7 @@ body {
 .barra-fill {
   height: 100%;
   width: 10%;
-  background: var(--cor-primaria);
+  background: linear-gradient(90deg, var(--cor-primaria), var(--amarelo));
   border-radius: 999px;
   transition: width 0.5s ease;
 }
@@ -270,37 +312,39 @@ body {
   align-items: center;
   justify-content: center;
   font-family: var(--fonte-mono);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--cor-texto);
 }
 
-/* tag de categoria */
+/* tag de categoria — agora com o laranja como destaque */
 .categoria-tag {
   align-self: flex-start;
   font-family: var(--fonte-mono);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  padding: 0.3rem 0.85rem;
+  padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  background: var(--cor-borda);
-  color: var(--cor-texto-2);
-  border: 1px solid var(--cor-borda);
+  background: var(--cor-primaria);
+  color: #fff;
 }
 
 /* card da questão */
 .questao-card {
   width: 100%;
-  padding: 1.4rem 1.25rem;
+  padding: 1.5rem 1.3rem;
   background: var(--cor-superficie);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio);
+  box-shadow: var(--sombra-card);
+  /* faixinha laranja à esquerda pra dar personalidade */
+  border-left: 4px solid var(--cor-primaria);
 }
 
 .questao-texto {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.65;
 }
@@ -318,23 +362,25 @@ body {
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  padding: 0.85rem 1rem;
+  padding: 0.9rem 1rem;
   background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
+  border: 2px solid var(--cor-borda);
   border-radius: var(--raio-sm);
   cursor: pointer;
   text-align: left;
   color: var(--cor-texto);
   font-family: var(--fonte-corpo);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.4;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
 }
 
+/* hover da opção: borda laranja e leve subida */
 .opcao-btn:hover:not(:disabled) {
   border-color: var(--cor-primaria);
-  background: var(--cor-fundo);
+  background: #fffaf0;
+  transform: translateY(-1px);
 }
 
 .opcao-btn:disabled {
@@ -342,19 +388,26 @@ body {
 }
 
 .opcao-letra {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--fonte-mono);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 800;
   flex-shrink: 0;
   background: var(--cor-fundo);
   border: 1px solid var(--cor-borda);
-  color: var(--cor-texto-2);
+  color: var(--cor-primaria);
+}
+
+/* quando a opção é hover, a letrinha fica preenchida */
+.opcao-btn:hover:not(:disabled) .opcao-letra {
+  background: var(--cor-primaria);
+  color: #fff;
+  border-color: var(--cor-primaria);
 }
 
 .opcao-texto {
@@ -369,23 +422,43 @@ body {
   color: var(--cor-acerto);
 }
 
+.opcao-btn.correta .opcao-letra {
+  background: var(--cor-acerto);
+  color: #fff;
+  border-color: var(--cor-acerto);
+}
+
 .opcao-btn.errada {
   border-color: var(--cor-erro) !important;
   background: #ffebee !important;
   color: var(--cor-erro);
 }
 
+.opcao-btn.errada .opcao-letra {
+  background: var(--cor-erro);
+  color: #fff;
+  border-color: var(--cor-erro);
+}
+
 
 /* ══ TELA FEEDBACK ══════════════════════════════ */
 .feedback-icone {
-  font-size: 4rem;
+  font-size: 4.5rem;
   line-height: 1;
+  /* pequeno "pulo" quando a tela aparece */
+  animation: pulo 0.5s ease-out;
+}
+
+@keyframes pulo {
+  0%   { transform: scale(0.3); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
 }
 
 .feedback-titulo {
   font-size: 2rem;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-align: center;
 }
 
@@ -393,7 +466,7 @@ body {
 .feedback-titulo.erro   { color: var(--cor-erro); }
 
 .feedback-explicacao {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: var(--cor-texto-2);
   text-align: center;
   line-height: 1.65;
@@ -417,14 +490,17 @@ body {
   font-size: 0.8rem;
   color: var(--cor-texto-2);
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .feedback-placar {
   width: 100%;
-  padding: 0.9rem 1.25rem;
+  padding: 0.95rem 1.25rem;
   background: var(--cor-superficie);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio);
+  box-shadow: var(--sombra-card);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -440,9 +516,9 @@ body {
 
 .placar-num {
   font-family: var(--fonte-mono);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--cor-texto);
+  color: var(--cor-primaria);
 }
 
 
@@ -455,13 +531,20 @@ body {
 }
 
 .resultado-medalha {
-  font-size: 4.5rem;
+  font-size: 5rem;
   line-height: 1;
+  /* leve giro ao surgir */
+  animation: girar 0.6s ease-out;
+}
+
+@keyframes girar {
+  from { transform: rotate(-20deg) scale(0.5); opacity: 0; }
+  to   { transform: rotate(0) scale(1); opacity: 1; }
 }
 
 .resultado-nome {
   font-family: var(--fonte-mono);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--cor-texto-2);
   font-weight: 700;
 }
@@ -471,6 +554,13 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 0.1rem;
+  /* caixa arredondada em volta do placar final */
+  padding: 1.25rem 2rem;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra-card);
+  min-width: 200px;
 }
 
 .score-num {
@@ -487,6 +577,7 @@ body {
   color: var(--cor-texto-2);
   text-transform: uppercase;
   letter-spacing: 2px;
+  margin-top: 0.3rem;
 }
 
 .resultado-stats {
@@ -501,6 +592,7 @@ body {
   background: var(--cor-superficie);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio);
+  box-shadow: var(--sombra-card);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -509,9 +601,9 @@ body {
 
 .stat-val {
   font-family: var(--fonte-mono);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  color: var(--cor-texto);
+  color: var(--cor-primaria);
 }
 
 .stat-label {
@@ -522,7 +614,7 @@ body {
 }
 
 .resultado-mensagem {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--cor-texto-2);
   text-align: center;
   line-height: 1.6;
